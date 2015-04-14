@@ -18,6 +18,7 @@ defmodule Exrabbit.Connection do
     * `username: <string>` - username used for auth
     * `password: <string>` - password used for auth
     * `host: <string>` - broker host
+    * `port: <string>` - broker port
     * `virtual_host: <string>` - the name of the virtual host in the broker
     * `heartbeat: <int>` - heartbeat interval in seconds (default: 1)
     * `with_chan: <bool>` - open a channel and puts it into the returned struct;
@@ -29,6 +30,7 @@ defmodule Exrabbit.Connection do
     conn_settings = Keyword.merge([
       username: get_default(:username),
       password: get_default(:password),
+      port: get_default(:port),
       host: get_default(:host) |> to_char_list,
       virtual_host: get_default(:virtual_host),
       heartbeat: get_default(:heartbeat),
@@ -37,6 +39,7 @@ defmodule Exrabbit.Connection do
     {:ok, conn} = :amqp_connection.start(amqp_params_network(
       username: conn_settings[:username],
       password: conn_settings[:password],
+      port: conn_settings[:port],
       host: conn_settings[:host],
       virtual_host: conn_settings[:virtual_host],
       heartbeat: conn_settings[:heartbeat]
@@ -78,6 +81,7 @@ defmodule Exrabbit.Connection do
 
   defp default(:username), do: "guest"
   defp default(:password), do: "guest"
+  defp default(:port), do: 5672
   defp default(:host), do: "localhost"
   defp default(:virtual_host), do: "/"
   defp default(:heartbeat), do: 1
